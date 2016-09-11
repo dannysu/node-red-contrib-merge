@@ -21,12 +21,15 @@ module.exports = function(RED) {
             try {
                 if (!Array.isArray(ctx.payload)) {
                     ctx.payload = [];
-                    ctx.timeout = setTimeout(function() {
-                        completeSend();
-                    }, node.timer);
                 }
 
                 ctx.payload.push(msg);
+                if (ctx.timeout) {
+                    clearTimeout(ctx.timeout);
+                }
+                ctx.timeout = setTimeout(function() {
+                    completeSend();
+                }, node.timer);
             }
             catch (err) {
                 console.log(err.stack);
