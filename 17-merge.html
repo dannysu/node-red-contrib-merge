@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<script type="text/x-red" data-template-name="merge">
+    <div class="node-row-custom">
+        <div class="form-row node-row-trigger">
+            <label style="width: auto;">Send the message:</label>
+            <ul>
+                <li style="height: 40px;">
+                    <label style="width: 280px;" for="node-input-timeout">After a timeout following the first message:</label> <input id="node-input-timeout" placeholder="seconds" type="text" style="width: 75px;">
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="merge">
+    <p>A function that merges the a sequence of messages into a single message.</p>
+    <p>A <i>timeout</i> is used to trigger sending the new message using whatever has been received so far.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('merge',{
+        category: 'function',
+        color:"#E2D96E",
+        defaults: {
+            name: {value:""},
+            timeout: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "join.png",
+        label: function() {
+            return this.name || "merge";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
