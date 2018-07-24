@@ -2,33 +2,39 @@
 
 module.exports = function(RED) {
 
-    function MergeNode(n) {
+    function MergeNodeTopic(n) {
         RED.nodes.createNode(this, n);
         const node = this;
         this.timer = Number(n.timeout || 0)*1000;
-        let ctx = {};
+        let ctx = [];
 
-        const completeSend = function() {
+        const completeSend = function(topic) {
+		
             node.send({
-                payload: ctx.payload
+                payload: ctx[topic].payload,
+				topic: topic
             });
 
-            clearTimeout(ctx.timeout);
-            ctx = {};
+            clearTimeout(ctx[topic].timeout);
+            ctx[topic] = {};
         }
 
         this.on("input", function(msg) {
             try {
-                if (!Array.isArray(ctx.payload)) {
-                    ctx.payload = [];
+			
+				if (msg.topic==undefined) msg.topic="";
+				if (ctx[msg.topic]==undefined) ctx[msg.topic] = {}
+				
+                if (!Array.isArray(ctx[msg.topic].payload)) {
+                    ctx[msg.topic].payload = [];
                 }
 
-                ctx.payload.push(msg);
-                if (ctx.timeout) {
-                    clearTimeout(ctx.timeout);
+                ctx[msg.topic].payload.push(msg);
+                if (ctx[msg.topic].timeout) {
+                    clearTimeout(ctx[msg.topic].timeout);
                 }
-                ctx.timeout = setTimeout(function() {
-                    completeSend();
+                ctx[msg.topic].timeout = setTimeout(function() {
+                    completeSend(msg.topic);
                 }, node.timer);
             }
             catch (err) {
@@ -37,9 +43,12 @@ module.exports = function(RED) {
         });
 
         this.on("close", function() {
-            clearTimeout(ctx.timeout);
-            ctx = {};
+            
+			for (topic in ctx)  {
+				clearTimeout(ctx[topic].timeout);
+				ctx[topic] = {};
+			}
         });
     }
-    RED.nodes.registerType("merge", MergeNode);
+    RED.nodes.registerType("mergeTopic", MergeNodeTopic);
 }
