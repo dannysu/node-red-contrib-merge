@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<script type="text/x-red" data-template-name="merge">
+<script type="text/x-red" data-template-name="mergeTopic">
     <div class="node-row-custom">
         <div class="form-row node-row-trigger">
             <label style="width: auto;">Send the message:</label>
@@ -12,13 +12,13 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="merge">
+<script type="text/x-red" data-help-name="mergeTopic">
     <p>A function that merges <b>per topic</b> the a sequence of messages into a single message.</p>
     <p>A <i>timeout</i> is used to trigger sending the new message using whatever has been received so far.</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('merge',{
+    RED.nodes.registerType('mergeTopic',{
         category: 'function',
         color:"#E2D96E",
         defaults: {
@@ -29,7 +29,7 @@
         outputs:1,
         icon: "join.png",
         label: function() {
-            return this.name || "merge";
+            return this.name || "mergeTopic";
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";
