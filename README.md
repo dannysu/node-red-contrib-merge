@@ -1,7 +1,7 @@
-node-red-contrib-merge
+node-red-contrib-merge-topic
 ======================
 
-A <a href="http://nodered.org" target="_new">Node-RED</a> node to merge message(s) over a specified period of time. Grouping is done by topic.
+A <a href="http://nodered.org" target="_new">Node-RED</a> node to merge message(s) over a specified period of time. <b>Grouping is done by topic.</b>
 
 Install
 -------
