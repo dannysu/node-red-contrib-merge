@@ -6,6 +6,10 @@
             <ul>
                 <li style="height: 40px;">
                     <label style="width: 280px;" for="node-input-timeout">After a timeout following the last message:</label> <input id="node-input-timeout" placeholder="seconds" type="text" style="width: 75px;">
+                </li><b>
+                OR
+                <li style="height: 40px;">
+                    <label style="width: 280px;" for="node-input-msglimit">Once the topic queue goes beyong more entries than:</label> <input id="node-input-msglimit" placeholder="msglimit" type="text" style="width: 75px;">
                 </li>
             </ul>
         </div>
@@ -23,7 +27,9 @@
         color:"#E2D96E",
         defaults: {
             name: {value:""},
-            timeout: {value:""}
+            timeout: {value:""},
+            msglimit: {value:0}
+
         },
         inputs:1,
         outputs:1,
