@@ -6,6 +6,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, n);
         const node = this;
         this.timer = Number(n.timeout || 0)*1000;
+	this.msglimit = Number(n.msglimit || 0);
         let ctx = [];
 
         const completeSend = function(topic) {
@@ -22,20 +23,28 @@ module.exports = function(RED) {
         this.on("input", function(msg) {
             try {
 			
-				if (msg.topic==undefined) msg.topic="";
-				if (ctx[msg.topic]==undefined) ctx[msg.topic] = {}
+		if (msg.topic==undefined) msg.topic="";
+		if (ctx[msg.topic]==undefined) ctx[msg.topic] = {}
 				
                 if (!Array.isArray(ctx[msg.topic].payload)) {
                     ctx[msg.topic].payload = [];
                 }
 
                 ctx[msg.topic].payload.push(msg);
+		    
                 if (ctx[msg.topic].timeout) {
                     clearTimeout(ctx[msg.topic].timeout);
                 }
-                ctx[msg.topic].timeout = setTimeout(function() {
-                    completeSend(msg.topic);
-                }, node.timer);
+
+		// reached limit
+		if (node.msglimit != 0 && (ctx[msg.topic].payload.length>=node.msglimit)) {
+			completeSend(msg.topic);
+		} else {
+		// program timer for next loop
+		    	ctx[msg.topic].timeout = setTimeout(function() {
+			    completeSend(msg.topic);
+			}, node.timer);
+		}
             }
             catch (err) {
                 console.log(err.stack);
